@@ -11,6 +11,18 @@ import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+def hex_to_rgba(hex_code, opacity=0.2):
+    """Converts hex to rgba string for Plotly compatibility."""
+    hex_code = hex_code.lstrip('#')
+    # If hex includes alpha (8 chars), separate it
+    if len(hex_code) == 8:
+        alpha = int(hex_code[6:8], 16) / 255.0
+        hex_code = hex_code[:6]
+    else:
+        alpha = opacity
+    r, g, b = tuple(int(hex_code[i:i+2], 16) for i in (0, 2, 4))
+    return f'rgba({r}, {g}, {b}, {alpha})'
+
 import streamlit as st
 from plotly.subplots import make_subplots
 
@@ -263,7 +275,7 @@ elif page == PAGES[1]:
                 x=cdf["month"], y=cdf["avg_price"],
                 fill="tozeroy", mode="lines+markers",
                 line=dict(color=COUNTY_COLOURS.get(county, C_SKY), width=2),
-                fillcolor=COUNTY_COLOURS.get(county, C_SKY) + "33",
+                fillcolor=hex_to_rgba(COUNTY_COLOURS.get(county, C_SKY), 0.2),
             )
         )
         fig.add_vline(x=peak_month, line_dash="dash",
@@ -472,7 +484,7 @@ elif page == PAGES[3]:
     fig = go.Figure()
     fig.add_trace(go.Histogram(
         x=residuals, nbinsx=60,
-        marker_color=C_GREEN + "99", marker_line_color=C_GREEN, marker_line_width=0.5,
+        marker_color=hex_to_rgba(C_GREEN, 0.6), marker_line_color=C_GREEN, marker_line_width=0.5,
     ))
     fig.add_vline(x=0, line_dash="dash", line_color=C_RUST)
     _apply_layout(fig, title="Prediction residuals (actual − predicted, all counties)",
