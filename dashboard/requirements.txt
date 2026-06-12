@@ -6,6 +6,6 @@ numpy
 scikit-learn
 xgboost
 lightgbm
-tensorflow
 joblib
 streamlit
+pydeck
