@@ -1,13 +1,6 @@
 {
-  "trained_on": "2026-06-13 07:18",
-  "model": "Random Forest",
-  "target": "agri_price",
-  "date_range": "2021-07-19 \u2192 2025-10-06",
-  "n_samples": 657,
-  "metrics": {
-    "MAE": "KES 1.84",
-    "RMSE": "KES 2.96",
-    "MAPE": "4.4%",
-    "R2": "0.6638"
-  }
+    "best_model": "Random Forest",
+    "trained_date": "2026-06-13 11:11:32",
+    "target_variable": "agri_price",
+    "forecast_end_date": "2026-06-16"
 }
