@@ -11,7 +11,7 @@ warnings.filterwarnings("ignore")
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DASHBOARD_DIR = os.path.join(BASE_DIR, 'dashboard')
 
-st.set_page_config(page_title="Farmer Price Guide", page_icon="🌽", layout="wide")
+st.set_page_config(page_title="Farmer Price Guide", page_icon="⌰", layout="wide")
 
 # Farmer-First Styling: High Contrast and Actionable
 st.markdown("""
@@ -43,20 +43,29 @@ def load_data():
 try:
     bundle = load_data()
 except:
-    st.error("⚠️ Data missing. Please run the export cell in the notebook to sync the dashboard.")
+    st.error("☑ Data missing. Please run the export cell in the notebook to sync the dashboard.")
     st.stop()
 
 # Header
 st.markdown("""
 <div class='main-header'>
-    <h1>🌽 Know Maize Prices Before You Sell</h1>
+    <h1>⌰ Know Maize Prices Before You Sell</h1>
     <p>Panga mauzo yako kwa ujasiri | Plan your sales with confidence</p>
 </div>
 """, unsafe_allow_html=True)
 
 # User Selection
 counties = sorted(bundle['panel']['county'].unique())
-selected_county = st.selectbox("📍 Chagua Eneo Lako / Select Your Area", counties)
+selected_county = st.selectbox("ጁ Chagua Eneo Lako / Select Your Area", counties)
+
+# Peak Month Summary (Specific Data)
+PEAK_MONTHS = {
+    "Kiambu": "Mar (Month 3)",
+    "Kirinyaga": "Jun (Month 6)",
+    "Mombasa": "Mar (Month 3)",
+    "Nairobi": "Jul (Month 7)",
+    "Uasin-Gishu": "Jul (Month 7)"
+}
 
 # Logic for Actionable Advice
 hist = bundle['panel'][bundle['panel']['county'] == selected_county].sort_values('week_start')
@@ -76,15 +85,15 @@ with c2:
 
 with c3:
     if trend_val > 2:
-        advice, bg = "🚀 WEKA GHALA (Store & Wait)", "#dcfce7"
+        advice, bg = "ፃ WEKA GHALA (Store & Wait)", "#dcfce7"
     elif trend_val < -2:
-        advice, bg = "⚠️ UZA SASA (Sell Now)", "#fee2e2"
+        advice, bg = "☑ UZA SASA (Sell Now)", "#fee2e2"
     else:
-        advice, bg = "⚖️ TULIA (Stable)", "#fef3c7"
+        advice, bg = "⚖ TULIA (Stable)", "#fef3c7"
     st.markdown(f"<div class='kpi-card' style='background:{bg}'><div style='color:#6b7280'>Ushauri Wetu<br>(Our Advice)</div><div class='action-advice'>{advice}</div></div>", unsafe_allow_html=True)
 
 # Interactive Chart
-st.write("### 📈 Mwongozo wa Bei / Price Guide")
+st.write("### ን Mwongozo wa Bei / Price Guide")
 fig = go.Figure()
 fig.add_trace(go.Scatter(x=hist['week_start'].tail(20), y=hist['agri_price'].tail(20), name="Past Prices", line=dict(color='#14532d', width=4)))
 fig.add_trace(go.Scatter(x=fore['week_start'], y=fore['predicted_price'], name="Future Prediction", line=dict(dash='dash', color='#ca8a04', width=4)))
@@ -93,8 +102,8 @@ st.plotly_chart(fig, use_container_width=True)
 
 # WhatsApp Share Placeholder
 st.markdown("--- ")
-st.button("📢 Shiriki na kikundi cha WhatsApp / Share with Group")
+st.button("ሀ Shiriki na kikundi cha WhatsApp / Share with Group")
 
-# County Tip
-mode_month = bundle['panel'][bundle['panel']['county']==selected_county]['week_start'].dt.month.mode()[0]
-st.info(f"💡 **Tip:** Katika {selected_county}, bei kawaida huwa juu mwezi wa {mode_month}. | Historically, prices in {selected_county} peak around month {mode_month}.")
+# County Tip with Specific Peak Month Data
+peak_info = PEAK_MONTHS.get(selected_county, "N/A")
+st.info(f"ፄ **Insight:** In {selected_county}, prices typically peak in **{peak_info}**. Plan your harvest and storage accordingly to maximize profit.")
