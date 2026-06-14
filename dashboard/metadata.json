@@ -1,6 +1,6 @@
 {
     "best_model": "Random Forest",
-    "trained_date": "2026-06-13 13:02:36",
+    "trained_date": "2026-06-14 06:06:47",
     "target_variable": "agri_price",
     "forecast_end_date": "2026-06-16"
 }
